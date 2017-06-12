@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Word;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -61,7 +62,13 @@ namespace OSBLEPlusWordAddin
 
         private void frmOSBLELogin_FormClosed(object sender, FormClosedEventArgs e)
         {
-            
+            //TODO: Remove when done testing
+            //Document currentDocument = Globals.ThisAddIn.GetActiveDocument();
+            //var paragraphs = currentDocument.Paragraphs;
+            //var temp = currentDocument.Content.Text;
+            //var temp2 = currentDocument.Content.Underline;
+            //var temp3 = currentDocument.Content.SpellingErrors;
+            //MessageBox.Show("TEST");
         }
     }
 }
