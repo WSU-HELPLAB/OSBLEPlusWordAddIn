@@ -39,8 +39,9 @@
             this.btnLogin = this.Factory.CreateRibbonButton();
             this.grpOSBLEOptions = this.Factory.CreateRibbonGroup();
             this.btnUpload = this.Factory.CreateRibbonButton();
-            this.lblLastSaveLabel = this.Factory.CreateRibbonLabel();
             this.dropDownCourse = this.Factory.CreateRibbonDropDown();
+            this.lblLastSaveLabel = this.Factory.CreateRibbonLabel();
+            this.separator1 = this.Factory.CreateRibbonSeparator();
             this.OSBLE.SuspendLayout();
             this.OSBLE_Login.SuspendLayout();
             this.grpOSBLEOptions.SuspendLayout();
@@ -72,6 +73,7 @@
             // grpOSBLEOptions
             // 
             this.grpOSBLEOptions.Items.Add(this.btnUpload);
+            this.grpOSBLEOptions.Items.Add(this.separator1);
             this.grpOSBLEOptions.Items.Add(this.dropDownCourse);
             this.grpOSBLEOptions.Items.Add(this.lblLastSaveLabel);
             this.grpOSBLEOptions.Label = "OSBLE+ Course Options";
@@ -85,15 +87,19 @@
             this.btnUpload.OfficeImageId = "UpgradeDocument";
             this.btnUpload.ShowImage = true;
             // 
+            // dropDownCourse
+            // 
+            this.dropDownCourse.Label = "Course: ";
+            this.dropDownCourse.Name = "dropDownCourse";
+            // 
             // lblLastSaveLabel
             // 
             this.lblLastSaveLabel.Label = "Last save: (none since login)";
             this.lblLastSaveLabel.Name = "lblLastSaveLabel";
             // 
-            // dropDownCourse
+            // separator1
             // 
-            this.dropDownCourse.Label = "Course: ";
-            this.dropDownCourse.Name = "dropDownCourse";
+            this.separator1.Name = "separator1";
             // 
             // OSBLE_Ribbon
             // 
@@ -108,6 +114,7 @@
             this.grpOSBLEOptions.ResumeLayout(false);
             this.grpOSBLEOptions.PerformLayout();
             this.ResumeLayout(false);
+
         }
 
         #endregion
@@ -119,6 +126,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnUpload;
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropDownCourse;
         internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblLastSaveLabel;
+        internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator1;
     }
 
     partial class ThisRibbonCollection
