@@ -17,13 +17,13 @@ namespace OSBLEPlusWordAddin
         private void OSBLE_Ribbon_Load(object sender, RibbonUIEventArgs e)
         {
 
-        }        
+        }
 
         private void btnLogin_Click(object sender, RibbonControlEventArgs e)
         {
             //MessageBox.Show("Click works");
             Form loginForm = new frmOSBLELogin();
-            loginForm.Show();                        
+            loginForm.Show();
         }
     }
 }

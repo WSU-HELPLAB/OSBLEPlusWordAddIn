@@ -67,13 +67,14 @@ namespace OSBLEPlusWordAddin
                     "Please contact support if this problem persists."));
                 return;
             }
+
             authClient.Close();
             authClient = null;
 
             if (string.IsNullOrEmpty(authToken))
             {
                 m_onComplete(this, new OSBLEStateEventArgs(false,
-                    "Could not log in to OSBLE. " +
+                    "Could not log into OSBLE. " +
                     "Please check your user name and password."));
                 return;
             }
@@ -100,7 +101,7 @@ namespace OSBLEPlusWordAddin
                     canBeGraded.Add(c);
                 }
             }
-            m_courses = canBeGraded.ToArray();
+            //m_courses = canBeGraded.ToArray();
 
             // Success if we made it this far
             m_onComplete(this, new OSBLEStateEventArgs(true, string.Empty));

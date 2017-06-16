@@ -202,6 +202,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="OSBLEPlusWordAddin_1_TemporaryKey.pfx" />
     <None Include="OSBLEPlusWordAddin_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -327,10 +328,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>OSBLEPlusWordAddin_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>OSBLEPlusWordAddin_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>1FA821FDD27151A9D48D450C5D39B2EB1614C6D7</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>E29B215D617C431CB99E7E96EDA343F0933D6847</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

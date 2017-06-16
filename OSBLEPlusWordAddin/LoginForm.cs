@@ -47,7 +47,7 @@ namespace OSBLEPlusWordAddin
             m_credPFileName = Environment.GetFolderPath(
                 Environment.SpecialFolder.LocalApplicationData);
             m_credPFileName = Path.Combine(
-                m_credPFileName, "OSBLE_Word_u.dat");
+                m_credPFileName, "OSBLE_Word_p.dat");
         }
 
         private void btnSubmit_Click(object sender, EventArgs e)
@@ -64,29 +64,16 @@ namespace OSBLEPlusWordAddin
                 return;
             }
 
+            //reset error text box and size of the form
+            txtErrors.Text = "";
+            txtErrors.Visible = false;
+            this.Size = new System.Drawing.Size(300, 194);
+
             // Disable the buttons while we're processing
             btnSubmit.Enabled = false;
             btnCancel.Enabled = false;
             // Also show the progress bar
             pbLogin.Visible = true;
-
-            // Save user name and password if needed
-            if (chkRememberCredentials.Checked)
-            {
-                byte[] encUser = EncryptStringToBytes(txtUsername.Text, s_key, s_iv);
-                byte[] encPass = EncryptStringToBytes(txtPassword.Text, s_key, s_iv);
-                try
-                {
-                    File.WriteAllBytes(m_credUFileName, encUser);
-                    File.WriteAllBytes(m_credPFileName, encPass);
-                }
-                catch (Exception) { }
-            }
-            else // Otherwise delete save files
-            {
-                if (File.Exists(m_credUFileName)) { File.Delete(m_credUFileName); }
-                if (File.Exists(m_credPFileName)) { File.Delete(m_credPFileName); }
-            }
 
             m_state = new OSBLEState(txtUsername.Text, txtPassword.Text);
             m_state.RefreshAsync(this.LoginAttemptCompleted_CT);
@@ -128,54 +115,59 @@ namespace OSBLEPlusWordAddin
             OSBLEStateEventArgs oe = e as OSBLEStateEventArgs;
             if (!oe.Success)
             {
-                MessageBox.Show(this, oe.Message, "OSBLE Login");
+                //insert message on new line if errors already exist
+                if (!String.IsNullOrEmpty(txtErrors.Text))
+                    txtErrors.Text += "\r\n";
+
+                txtErrors.Text += oe.Message;
+
+                //adjust size of the form
+                if (!String.IsNullOrEmpty(txtErrors.Text))
+                {
+                    txtErrors.Visible = true;
+
+                    using (Graphics g = CreateGraphics())
+                    {
+                        //determine height of the error text box to determine new height of the form
+                        SizeF size = g.MeasureString(txtErrors.Text, txtErrors.Font);
+                        txtErrors.Height = (int)Math.Ceiling(size.Height - 12 + size.Width / txtErrors.Font.Height);
+                    }
+
+                    this.Size = new System.Drawing.Size(this.Width, this.Height + txtErrors.Height);
+                }
+
                 return;
             }
 
             this.DialogResult = DialogResult.OK;
 
-            this.Close();
+            // Save user name and password if login was successful and box is checked
+            if (chkRememberCredentials.Checked)
+            {
+                byte[] encUser = EncryptStringToBytes(txtUsername.Text, s_key, s_iv);
+                byte[] encPass = EncryptStringToBytes(txtPassword.Text, s_key, s_iv);
+                try
+                {
+                    File.WriteAllBytes(m_credUFileName, encUser);
+                    File.WriteAllBytes(m_credPFileName, encPass);
+                }
+                catch (Exception) { }
+            }
+
+            // Otherwise delete save files
+            else
+            {
+                if (File.Exists(m_credUFileName)) { File.Delete(m_credUFileName); }
+                if (File.Exists(m_credPFileName)) { File.Delete(m_credPFileName); }
+            }
+
+            //this.Close();
         }
 
         // CT = cross-thread
         private void LoginAttemptCompleted_CT(object sender, EventArgs e)
         {
             this.Invoke(new EventHandler(LoginAttemptCompleted), sender, e);
-        }
-
-        private void LoginForm_Load(object sender, EventArgs e)
-        {
-            if (!File.Exists(m_credUFileName))
-            {
-                // No credentials file means that they didn't save their user 
-                // name and password last time.
-                chkRememberCredentials.Checked = false;
-                return;
-            }
-
-            chkRememberCredentials.Checked = true;
-
-            string userName = LoadEncrypted(m_credUFileName);
-            if (string.IsNullOrEmpty(userName))
-            {
-                return;
-            }
-            txtUsername.Text = userName;
-
-            // Now the password
-            if (File.Exists(m_credPFileName))
-            {
-                string password = LoadEncrypted(m_credPFileName);
-                if (string.IsNullOrEmpty(password))
-                {
-                    return;
-                }
-                txtPassword.Text = password;
-            }
-            else
-            {
-                txtPassword.Text = string.Empty;
-            }
         }
 
         #region Cryptography methods from http://msdn.microsoft.com/en-us/library/system.security.cryptography.rijndaelmanaged.aspx
@@ -288,7 +280,29 @@ namespace OSBLEPlusWordAddin
 
         private void frmOSBLELogin_Load(object sender, EventArgs e)
         {
+            if (!File.Exists(m_credUFileName) || !File.Exists(m_credPFileName))
+            {
+                // No credentials file means that they didn't save their user 
+                // name and password last time.
+                chkRememberCredentials.Checked = false;
+                return;
+            }
 
+            string userName = LoadEncrypted(m_credUFileName);
+            string password = LoadEncrypted(m_credPFileName);
+
+            if (string.IsNullOrEmpty(userName) || (string.IsNullOrEmpty(password)))
+            {
+                // Empty credential files means a file was not saved correctly
+                // and we cannot import an empty username or password.
+                chkRememberCredentials.Checked = false;
+                return;
+            }
+
+
+            txtUsername.Text = userName;
+            txtPassword.Text = password;
+            chkRememberCredentials.Checked = true;
         }
     }
 }
