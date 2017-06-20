@@ -37,11 +37,12 @@
             this.OSBLE = this.Factory.CreateRibbonTab();
             this.OSBLE_Login = this.Factory.CreateRibbonGroup();
             this.btnLogin = this.Factory.CreateRibbonButton();
+            this.btnLogout = this.Factory.CreateRibbonButton();
             this.grpOSBLEOptions = this.Factory.CreateRibbonGroup();
             this.btnUpload = this.Factory.CreateRibbonButton();
-            this.dropDownCourse = this.Factory.CreateRibbonDropDown();
-            this.lblLastSaveLabel = this.Factory.CreateRibbonLabel();
             this.separator1 = this.Factory.CreateRibbonSeparator();
+            this.dropDownCourse = this.Factory.CreateRibbonDropDown();
+            this.lblLastSave = this.Factory.CreateRibbonLabel();
             this.OSBLE.SuspendLayout();
             this.OSBLE_Login.SuspendLayout();
             this.grpOSBLEOptions.SuspendLayout();
@@ -57,6 +58,7 @@
             // OSBLE_Login
             // 
             this.OSBLE_Login.Items.Add(this.btnLogin);
+            this.OSBLE_Login.Items.Add(this.btnLogout);
             this.OSBLE_Login.Label = "OSBLE+ Account";
             this.OSBLE_Login.Name = "OSBLE_Login";
             // 
@@ -70,14 +72,26 @@
             this.btnLogin.ShowImage = true;
             this.btnLogin.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnLogin_Click);
             // 
+            // btnLogout
+            // 
+            this.btnLogout.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnLogout.Label = "Sign out...";
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.OfficeImageId = "Delete";
+            this.btnLogout.ScreenTip = "Sign out of OSBLE+";
+            this.btnLogout.ShowImage = true;
+            this.btnLogout.Visible = false;
+            this.btnLogout.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnLogout_Click);
+            // 
             // grpOSBLEOptions
             // 
             this.grpOSBLEOptions.Items.Add(this.btnUpload);
             this.grpOSBLEOptions.Items.Add(this.separator1);
             this.grpOSBLEOptions.Items.Add(this.dropDownCourse);
-            this.grpOSBLEOptions.Items.Add(this.lblLastSaveLabel);
+            this.grpOSBLEOptions.Items.Add(this.lblLastSave);
             this.grpOSBLEOptions.Label = "OSBLE+ Course Options";
             this.grpOSBLEOptions.Name = "grpOSBLEOptions";
+            this.grpOSBLEOptions.Visible = false;
             // 
             // btnUpload
             // 
@@ -87,19 +101,20 @@
             this.btnUpload.OfficeImageId = "UpgradeDocument";
             this.btnUpload.ShowImage = true;
             // 
+            // separator1
+            // 
+            this.separator1.Name = "separator1";
+            // 
             // dropDownCourse
             // 
             this.dropDownCourse.Label = "Course: ";
             this.dropDownCourse.Name = "dropDownCourse";
+            this.dropDownCourse.SizeString = "12/31/20XX 11:59:59 PM";
             // 
-            // lblLastSaveLabel
+            // lblLastSave
             // 
-            this.lblLastSaveLabel.Label = "Last save: (none since login)";
-            this.lblLastSaveLabel.Name = "lblLastSaveLabel";
-            // 
-            // separator1
-            // 
-            this.separator1.Name = "separator1";
+            this.lblLastSave.Label = "Last save: ";
+            this.lblLastSave.Name = "lblLastSave";
             // 
             // OSBLE_Ribbon
             // 
@@ -125,8 +140,9 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpOSBLEOptions;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnUpload;
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropDownCourse;
-        internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblLastSaveLabel;
+        internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblLastSave;
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnLogout;
     }
 
     partial class ThisRibbonCollection

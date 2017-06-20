@@ -101,7 +101,7 @@ namespace OSBLEPlusWordAddin
                     canBeGraded.Add(c);
                 }
             }
-            //m_courses = canBeGraded.ToArray();
+            m_courses = canBeGraded.ToArray();
 
             // Success if we made it this far
             m_onComplete(this, new OSBLEStateEventArgs(true, string.Empty));
