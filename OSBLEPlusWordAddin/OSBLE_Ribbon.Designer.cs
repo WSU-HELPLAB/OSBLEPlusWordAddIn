@@ -100,6 +100,7 @@
             this.btnUpload.Name = "btnUpload";
             this.btnUpload.OfficeImageId = "UpgradeDocument";
             this.btnUpload.ShowImage = true;
+            this.btnUpload.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnUpload_Click);
             // 
             // separator1
             // 
