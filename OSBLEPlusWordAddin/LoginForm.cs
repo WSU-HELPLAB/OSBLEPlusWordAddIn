@@ -160,8 +160,6 @@ namespace OSBLEPlusWordAddin
                 if (File.Exists(m_credUFileName)) { File.Delete(m_credUFileName); }
                 if (File.Exists(m_credPFileName)) { File.Delete(m_credPFileName); }
             }
-
-            this.Close();
         }
 
         // CT = cross-thread

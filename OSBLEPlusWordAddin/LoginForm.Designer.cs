@@ -122,13 +122,15 @@
             // 
             // pbLogin
             // 
-            this.pbLogin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.pbLogin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pbLogin.Location = new System.Drawing.Point(10, 120);
             this.pbLogin.Margin = new System.Windows.Forms.Padding(2);
             this.pbLogin.Name = "pbLogin";
             this.pbLogin.Size = new System.Drawing.Size(99, 23);
+            this.pbLogin.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.pbLogin.TabIndex = 4;
+            this.pbLogin.Visible = false;
             // 
             // txtErrors
             // 
