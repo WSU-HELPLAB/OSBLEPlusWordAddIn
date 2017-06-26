@@ -26,6 +26,11 @@ namespace OSBLEPlusWordAddin
         /// </summary>
         private string m_credUFileName;
 
+        /// <summary>
+        /// Name of the directory used to store local files related to the OSBLE Plus Word Addin
+        /// </summary>
+        private string m_localDirectory;
+
         private OSBLEState m_state = null;
 
         private static byte[] s_key = new byte[]{
@@ -36,20 +41,39 @@ namespace OSBLEPlusWordAddin
         private static byte[] s_iv = new byte[]{
             240,218,75,92,242,171,14,143,97,50,227,197,9,242,206,202
         };
+
+        /// <summary>
+        /// Assign paths to OSBLE directory and credential files
+        /// </summary>
         public frmOSBLELogin()
         {
             InitializeComponent();
 
-            m_credUFileName = Environment.GetFolderPath(
-                Environment.SpecialFolder.LocalApplicationData);
-            m_credUFileName = Path.Combine(
-                m_credUFileName, "OSBLE_Word_u.dat");
-            m_credPFileName = Environment.GetFolderPath(
-                Environment.SpecialFolder.LocalApplicationData);
-            m_credPFileName = Path.Combine(
-                m_credPFileName, "OSBLE_Word_p.dat");
+            try
+            {
+                //set local directory to the local app data directory and append the name of the OSBLE directory
+                m_localDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                m_localDirectory = Path.Combine(m_localDirectory, "OSBLEPlusWord");
+
+                //create local directory if it does not currently exist
+                if (!Directory.Exists(m_localDirectory))
+                    Directory.CreateDirectory(m_localDirectory);
+
+                //set paths to credential files
+                m_credUFileName = Path.Combine(m_localDirectory, "OSBLE_Word_u.dat");
+                m_credPFileName = Path.Combine(m_localDirectory, "OSBLE_Word_p.dat");
+            }
+
+            catch(Exception) { }
         }
 
+        /// <summary>
+        /// The event called when a login has been submitted. The event will
+        /// default the user interface of the form and deactivate the
+        /// buttons. Updates will take place on another thread.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnSubmit_Click(object sender, EventArgs e)
         {
             // Ignore the click if we have an empty user name or password
@@ -79,6 +103,10 @@ namespace OSBLEPlusWordAddin
             m_state.RefreshAsync(this.LoginAttemptCompleted_CT);
         }
 
+        /// <summary>
+        /// Simply checks if the login was successful before returning the login state
+        /// </summary>
+        /// <returns>OSBLE state of the logged in user</returns>
         public OSBLEState DoPrompt()
         {
             if (this.ShowDialog() != DialogResult.OK)
@@ -89,6 +117,11 @@ namespace OSBLEPlusWordAddin
             return m_state;
         }
 
+        /// <summary>
+        /// Returns an decrypted string from an encrypted file
+        /// </summary>
+        /// <param name="fileName">Name of file containing encrypted string</param>
+        /// <returns></returns>
         private static string LoadEncrypted(string fileName)
         {
             // Load encrypted file
@@ -106,6 +139,15 @@ namespace OSBLEPlusWordAddin
             catch (Exception ex) { return null; }
         }
 
+        /// <summary>
+        /// The event called after a login attempt has been completed. The event
+        /// will first determine if the login was successful, if there was an error
+        /// then a error message will be displayed on the form. Otherwise, the form
+        /// will be closed and the credentials will be updated in the local app data
+        /// according to the selected form settings.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoginAttemptCompleted(object sender, EventArgs e)
         {
             pbLogin.Visible = false;
@@ -162,7 +204,11 @@ namespace OSBLEPlusWordAddin
             }
         }
 
-        // CT = cross-thread
+        /// <summary>
+        /// Process the login attempt on another thread
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoginAttemptCompleted_CT(object sender, EventArgs e)
         {
             this.Invoke(new EventHandler(LoginAttemptCompleted), sender, e);
@@ -211,25 +257,6 @@ namespace OSBLEPlusWordAddin
 
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-
-        private void frmOSBLELogin_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            //TODO: Remove when done testing
-            //Document currentDocument = Globals.ThisAddIn.GetActiveDocument();
-            //var paragraphs = currentDocument.Paragraphs;
-            //var temp = currentDocument.Content.Text;
-            //var temp2 = currentDocument.Content.Underline;
-            //var temp3 = currentDocument.Content.SpellingErrors;
-            //MessageBox.Show("TEST");
-        }
-
-
-
         static string DecryptStringFromBytes(byte[] cipherText, byte[] Key, byte[] IV)
         {
             // Check arguments. 
@@ -276,6 +303,13 @@ namespace OSBLEPlusWordAddin
         }
         #endregion
 
+        /// <summary>
+        /// The event called when the login form is displayed. The event will
+        /// first determine if the credentials exist and load them into the
+        /// login form if found. Otherwise, the login form will be left blank.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmOSBLELogin_Load(object sender, EventArgs e)
         {
             if (!File.Exists(m_credUFileName) || !File.Exists(m_credPFileName))
@@ -301,6 +335,27 @@ namespace OSBLEPlusWordAddin
             txtUsername.Text = userName;
             txtPassword.Text = password;
             chkRememberCredentials.Checked = true;
+        }
+
+        /// <summary>
+        /// Simply closes the login form.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void frmOSBLELogin_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            //TODO: Remove when done testing
+            //Document currentDocument = Globals.ThisAddIn.GetActiveDocument();
+            //var paragraphs = currentDocument.Paragraphs;
+            //var temp = currentDocument.Content.Text;
+            //var temp2 = currentDocument.Content.Underline;
+            //var temp3 = currentDocument.Content.SpellingErrors;
+            //MessageBox.Show("TEST");
         }
     }
 }
