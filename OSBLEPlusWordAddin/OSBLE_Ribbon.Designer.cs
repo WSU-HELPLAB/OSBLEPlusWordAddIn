@@ -42,6 +42,7 @@
             this.btnUpload = this.Factory.CreateRibbonButton();
             this.separator1 = this.Factory.CreateRibbonSeparator();
             this.dropDownCourse = this.Factory.CreateRibbonDropDown();
+            this.dropDownAssignment = this.Factory.CreateRibbonDropDown();
             this.lblLastSave = this.Factory.CreateRibbonLabel();
             this.OSBLE.SuspendLayout();
             this.OSBLE_Login.SuspendLayout();
@@ -88,6 +89,7 @@
             this.grpOSBLEOptions.Items.Add(this.btnUpload);
             this.grpOSBLEOptions.Items.Add(this.separator1);
             this.grpOSBLEOptions.Items.Add(this.dropDownCourse);
+            this.grpOSBLEOptions.Items.Add(this.dropDownAssignment);
             this.grpOSBLEOptions.Items.Add(this.lblLastSave);
             this.grpOSBLEOptions.Label = "OSBLE+ Course Options";
             this.grpOSBLEOptions.Name = "grpOSBLEOptions";
@@ -108,9 +110,16 @@
             // 
             // dropDownCourse
             // 
-            this.dropDownCourse.Label = "Course: ";
+            this.dropDownCourse.Label = "Course:       ";
             this.dropDownCourse.Name = "dropDownCourse";
-            this.dropDownCourse.SizeString = "12/31/20XX 11:59:59 PM";
+            this.dropDownCourse.SizeString = "Let this be a long string to display a wide string in the drop down menu";
+            this.dropDownCourse.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDownCourse_SelectionChanged);
+            // 
+            // dropDownAssignment
+            // 
+            this.dropDownAssignment.Label = "Assignment:";
+            this.dropDownAssignment.Name = "dropDownAssignment";
+            this.dropDownAssignment.SizeString = "Let this be a long string to display a wide string in the drop down menu";
             // 
             // lblLastSave
             // 
@@ -122,7 +131,6 @@
             this.Name = "OSBLE_Ribbon";
             this.RibbonType = "Microsoft.Word.Document";
             this.Tabs.Add(this.OSBLE);
-            this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.OSBLE_Ribbon_Load);
             this.OSBLE.ResumeLayout(false);
             this.OSBLE.PerformLayout();
             this.OSBLE_Login.ResumeLayout(false);
@@ -144,6 +152,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblLastSave;
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnLogout;
+        internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropDownAssignment;
     }
 
     partial class ThisRibbonCollection

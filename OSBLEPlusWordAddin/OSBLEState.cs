@@ -1,28 +1,24 @@
 ﻿// Created 5-13-13 by Evan Olds for the OSBLE project at WSU
 // Modified 9/2015 for VS 2015 and the MS word variation by Daniel Olivares for the OSBLE project at WSU
-using OSBLEPlusWordAddin.OSBLEAuthService;
-using OSBLEPlusWordAddin.OSBLEServices;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Net.Http;
+using OSBLEStructures;
 
 namespace OSBLEPlusWordAddin
 {
     internal class OSBLEState
     {
-        private Course[] m_courses = null;
+        private string m_user, m_pass, m_authtoken;
 
-        /// <summary>
-        /// Dictionary that maps a course ID to an array of users for that course. This 
-        /// collection is empty by default and rosters have to be refreshed individually 
-        /// per course through the <see cref="RefreshRosterAsync"/> function.
-        /// </summary>
-        private Dictionary<int, CourseUser[]> m_rosters = new Dictionary<int, CourseUser[]>();
+        private ProfileCourse[] m_courses = null;
 
-        private string m_user, m_pass;
+        private SubmisionAssignment[] m_assignments = null;
 
         private EventHandler m_onComplete = null;
 
@@ -32,9 +28,9 @@ namespace OSBLEPlusWordAddin
             m_pass = password;
         }
 
-        public Course[] Courses
+        public string UserName
         {
-            get { return m_courses; }
+            get { return m_user; }
         }
 
         public string Password
@@ -42,6 +38,20 @@ namespace OSBLEPlusWordAddin
             get { return m_pass; }
         }
 
+        public ProfileCourse[] Courses
+        {
+            get { return m_courses; }
+        }
+
+        public SubmisionAssignment[] Assignments
+        {
+            get { return m_assignments; }
+        }
+
+        /// <summary>
+        /// Asyncrhonous form validation function called in the login form.
+        /// </summary>
+        /// <param name="onComplete">event to be fired in the login form afterwards</param>
         public void RefreshAsync(EventHandler onComplete)
         {
             m_onComplete = onComplete;
@@ -50,28 +60,31 @@ namespace OSBLEPlusWordAddin
             t.Start();
         }
 
+        /// <summary>
+        /// Verifies the username and password submitted by the login form.
+        /// If the information is valid then the user's course will be 
+        /// populated and the ribbon will be updated to a logged in state.
+        /// Otherwise an error message will appear.
+        /// </summary>
         private void RefreshProc()
         {
-            // First login
-            AuthenticationServiceClient authClient = new AuthenticationServiceClient();
-            string authToken = null;
+            //validate login information
             try
             {
-                authToken = authClient.ValidateUser(m_user, m_pass);
+                m_authtoken = AuthenticationHelper.Login(m_user, m_pass);
             }
+
+            //connection error
             catch (System.ServiceModel.EndpointNotFoundException)
             {
-                authClient.Close();
                 m_onComplete(this, new OSBLEStateEventArgs(false,
                     "Could not connect to the OSBLE server. " +
                     "Please contact support if this problem persists."));
                 return;
             }
 
-            authClient.Close();
-            authClient = null;
-
-            if (string.IsNullOrEmpty(authToken))
+            //credentials error
+            if (string.IsNullOrEmpty(m_authtoken))
             {
                 m_onComplete(this, new OSBLEStateEventArgs(false,
                     "Could not log into OSBLE. " +
@@ -79,11 +92,10 @@ namespace OSBLEPlusWordAddin
                 return;
             }
 
-            // Now get a list of courses
-            OsbleServiceClient osc = new OsbleServiceClient();
-            m_courses = osc.GetCourses(authToken);
+            //login was successful so update collection of the user's courses
+            UpdateCourses();
 
-            // Make sure we got some courses
+            //don't bother continuing to login if no courses found
             if (null == m_courses || 0 == m_courses.Length)
             {
                 m_onComplete(this, new OSBLEStateEventArgs(false,
@@ -91,25 +103,70 @@ namespace OSBLEPlusWordAddin
                 return;
             }
 
-            // Go through the courses and find out this user's role
-            List<Course> canBeGraded = new List<Course>();
-            foreach (Course c in m_courses)
-            {
-                CourseRole cr = osc.GetCourseRole(c.ID, authToken);
-                if (cr.CanGrade)
-                {
-                    canBeGraded.Add(c);
-                }
-            }
-            m_courses = canBeGraded.ToArray();
+            //TODO: consider filtering courses by the user's role
 
-            // Success if we made it this far
             m_onComplete(this, new OSBLEStateEventArgs(true, string.Empty));
         }
 
-        public string UserName
+        private string Authenticate(string m_user, string m_pass)
         {
-            get { return m_user; }
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Asynchronous web api call to update the array of courses.
+        /// </summary>
+        /// <param name="c"></param>
+        public void UpdateCourses()
+        {
+            List<ProfileCourse> c = null;
+
+            //web api call to collect courses
+            try
+            {
+                var task = ServicesHelper.GetCoursesForUser(m_authtoken);
+                c = task.Result;
+            }
+
+            catch (Exception e)
+            {
+                //TODO: Handle unknown exception
+            }
+
+
+            //set courses to the web api result converted to an array
+            if (c == null)
+                m_courses = null;
+            else
+                m_courses = c.ToArray();
+        }
+
+        /// <summary>
+        /// Asynchronous web api call to update the array of submission assignments.
+        /// </summary>
+        /// <param name="c"></param>
+        public void UpdateAssignments(ProfileCourse c)
+        {
+            List<SubmisionAssignment> a = null;
+
+            //web api call to collect assignments
+            try
+            {
+                var task = ServicesHelper.GetAssignmentsForCourse(c.Id, m_authtoken);
+                a = task.Result;
+            }
+
+            catch (Exception e)
+            {
+                //TODO: Handle unknown exception
+            }
+
+
+            //set assignments to the web api result converted to an array
+            if (a == null)
+                m_assignments = null;
+            else
+                m_assignments = a.ToArray();
         }
     }
 
