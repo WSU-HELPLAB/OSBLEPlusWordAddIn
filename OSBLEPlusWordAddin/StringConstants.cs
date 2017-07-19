@@ -7,5 +7,7 @@
 #else
         internal static readonly string DataServiceRoot = "https://plus.osble.org/plusservices/";
 #endif
+
+        internal static readonly string LocalFolder = "OSBLEPlusWord";
     }
 }

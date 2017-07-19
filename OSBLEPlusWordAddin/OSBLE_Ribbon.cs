@@ -1,14 +1,8 @@
-﻿using OSBLEStructures;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Microsoft.Office.Tools.Ribbon;
-using Word = Microsoft.Office.Interop.Word;
-
-//testing only
+﻿using System;
 using System.Windows.Forms;
+using Microsoft.Office.Tools.Ribbon;
+using Osble.Models.ProfileCourse;
+using Osble.Models.SubmissionAssignment;
 
 namespace OSBLEPlusWordAddin
 {
@@ -84,12 +78,11 @@ namespace OSBLEPlusWordAddin
             if (dropDownCourse.SelectedItem.Tag != null && dropDownAssignment.SelectedItem.Tag != null)
             {
                 var course = dropDownCourse.SelectedItem.Tag as ProfileCourse;
+                var assignment = dropDownAssignment.SelectedItem.Tag as SubmisionAssignment;
                 var document = Globals.ThisAddIn.Application.ActiveDocument;
 
-                //TODO: check for assignment validation and update submit function to involve assignment tag
-
                 //submit the document and return submission status
-                OSBLEDocumentSaver.SaveResult sr = OSBLEDocumentSaver.Save(mState.UserName, mState.Password, course.Id, document);
+                OSBLEDocumentSaver.SaveResult sr = OSBLEDocumentSaver.Save(mState, course.Id, assignment.Id, document);
 
                 //update last save label if the submission was successful otherwise display the returned error message
                 if(sr.Success)

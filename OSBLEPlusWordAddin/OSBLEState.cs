@@ -1,14 +1,10 @@
-﻿// Created 5-13-13 by Evan Olds for the OSBLE project at WSU
-// Modified 9/2015 for VS 2015 and the MS word variation by Daniel Olivares for the OSBLE project at WSU
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Osble.Models.ProfileCourse;
+using Osble.Models.SubmissionAssignment;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Net.Http;
-using OSBLEStructures;
+using Osble.Client.Authentication;
+using Osble.Client.AsyncServiceClient;
 
 namespace OSBLEPlusWordAddin
 {
@@ -36,6 +32,11 @@ namespace OSBLEPlusWordAddin
         public string Password
         {
             get { return m_pass; }
+        }
+
+        public string AuthToken
+        {
+            get { return m_authtoken; }
         }
 
         public ProfileCourse[] Courses
@@ -71,7 +72,7 @@ namespace OSBLEPlusWordAddin
             //validate login information
             try
             {
-                m_authtoken = AuthenticationHelper.Login(m_user, m_pass);
+                m_authtoken = AuthenticationClient.Login(m_user, m_pass);
             }
 
             //connection error
@@ -124,7 +125,7 @@ namespace OSBLEPlusWordAddin
             //web api call to collect courses
             try
             {
-                var task = ServicesHelper.GetCoursesForUser(m_authtoken);
+                var task = AsyncServiceClient.GetCoursesForUser(m_authtoken);
                 c = task.Result;
             }
 
@@ -152,7 +153,7 @@ namespace OSBLEPlusWordAddin
             //web api call to collect assignments
             try
             {
-                var task = ServicesHelper.GetAssignmentsForCourse(c.Id, m_authtoken);
+                var task = AsyncServiceClient.GetAssignmentsForCourse(c.Id, m_authtoken);
                 a = task.Result;
             }
 

@@ -53,7 +53,7 @@ namespace OSBLEPlusWordAddin
             {
                 //set local directory to the local app data directory and append the name of the OSBLE directory
                 m_localDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                m_localDirectory = Path.Combine(m_localDirectory, "OSBLEPlusWord");
+                m_localDirectory = Path.Combine(m_localDirectory, StringConstants.LocalFolder);
 
                 //create local directory if it does not currently exist
                 if (!Directory.Exists(m_localDirectory))

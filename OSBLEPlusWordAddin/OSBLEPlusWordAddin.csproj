@@ -117,6 +117,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
@@ -168,9 +172,14 @@
     <Compile Include="LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="OSBLEDocumentSaver.cs" />
+    <Compile Include="OsbleHelp\Client\Osble_ServiceClient.cs" />
+    <Compile Include="OsbleHelp\Client\Osble_Authentication.cs" />
+    <Compile Include="OsbleHelp\Models\Osble_Models.cs" />
+    <Compile Include="OsbleHelp\Models\Osble_Events.cs" />
+    <Compile Include="OsbleHelp\Models\Osble_SubmissionAssignment.cs" />
+    <Compile Include="Save\DocumentSaver.cs" />
     <Compile Include="OSBLEState.cs" />
-    <Compile Include="OsbleHelp\OSBLEStructures.cs" />
+    <Compile Include="OsbleHelp\Models\Osble_ProfileCourse.cs" />
     <Compile Include="OSBLE_Ribbon.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -180,8 +189,8 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="OsbleHelp\WebServicesHelper.cs" />
-    <Compile Include="WordSaveHandler.cs" />
+    <Compile Include="OsbleHelp\Client\Osble_AsyncServiceClient.cs" />
+    <Compile Include="Save\WordSaveHandler.cs" />
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -202,7 +211,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="OSBLEPlusWordAddin_1_TemporaryKey.pfx" />
-    <None Include="OSBLEPlusWordAddin_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -227,9 +235,7 @@
   <ItemGroup>
     <None Include="Resources\osble.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
