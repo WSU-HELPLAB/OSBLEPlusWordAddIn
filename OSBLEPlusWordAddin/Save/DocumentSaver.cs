@@ -99,10 +99,20 @@ namespace OSBLEPlusWordAddin
                 return new SaveResult(false, "Please save the current document before submitting.");
             }
 
-            //TODO: consider try/catch here
-            //TODO: consider passing username/date/filename
-            string zipPath = SaveFileToZip(doc);
-            byte[] zipData = File.ReadAllBytes(zipPath);
+            string zipPath = null;
+            byte[] zipData = null;
+
+            //zip document
+            try
+            {
+                zipPath = SaveFileToZip(state.FullName, doc);
+                zipData = File.ReadAllBytes(zipPath);
+            }
+
+            catch(Exception e)
+            {
+                return new SaveResult(true, "Failed to package document before sending to the server.");
+            }
 
             //package assignment information
             var submitevent = new SubmitEvent();
@@ -110,10 +120,23 @@ namespace OSBLEPlusWordAddin
             submitevent.CourseId = courseId;
             submitevent.SolutionData = zipData;
 
-            //call asynchronous web api helper function
-            var result = SubmitAssignment(submitevent, state.AuthToken);
+            HttpResponseMessage response = null;
 
-            return new SaveResult(true, null);
+            //call asynchronous web api helper function
+            try
+            {
+                response = AsyncServiceClient.SubmitAssignment(submitevent, state.AuthToken).Result;
+            }
+
+            catch (Exception e)
+            {
+                return new SaveResult(false, "Failed to submit document to the server.");
+            }
+
+            if(response.IsSuccessStatusCode)
+                return new SaveResult(true, null);
+            else
+                return new SaveResult(false, "The server failed to process the submission.");
         }
     }
 }
