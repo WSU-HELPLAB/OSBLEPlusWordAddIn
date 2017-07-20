@@ -12,6 +12,8 @@ namespace OSBLEPlusWordAddin
     {
         private string m_user, m_pass, m_authtoken;
 
+        private string m_name;
+
         private ProfileCourse[] m_courses = null;
 
         private SubmisionAssignment[] m_assignments = null;
@@ -37,6 +39,11 @@ namespace OSBLEPlusWordAddin
         public string AuthToken
         {
             get { return m_authtoken; }
+        }
+
+        public string FullName
+        {
+            get { return m_name; }
         }
 
         public ProfileCourse[] Courses
@@ -73,6 +80,10 @@ namespace OSBLEPlusWordAddin
             try
             {
                 m_authtoken = AuthenticationClient.Login(m_user, m_pass);
+                m_name = AsyncServiceClient.GetName(m_authtoken).Result;
+
+                if (m_name == null)
+                    m_name = "";
             }
 
             //connection error
@@ -196,29 +207,17 @@ namespace OSBLEPlusWordAddin
 
         public string Message
         {
-            get
-            {
-                return m_message;
-            }
+            get { return m_message; }
         }
 
         public OSBLEState State
         {
-            get
-            {
-                return m_state;
-            }
+            get { return m_state; }
         }
 
-        /// <summary>
-        /// Indicates whether or not the action completed successfully
-        /// </summary>
         public bool Success
         {
-            get
-            {
-                return m_success;
-            }
+            get { return m_success; }
         }
     }
 }

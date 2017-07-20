@@ -20,7 +20,6 @@ namespace Osble.Client.AsyncServiceClient
         /// <returns>task with a list of courses as the result</returns>
         public static async Task<List<ProfileCourse>> GetCoursesForUser(string authToken)
         {
-
             using (var client = ServiceClient.GetClient())
             {
                 var task = client.GetAsync(string.Format("api/userprofiles/getcoursesforuser?a={0}", authToken));
@@ -69,9 +68,18 @@ namespace Osble.Client.AsyncServiceClient
 
                 var response = await client.PostAsXmlAsync("api/course/post", request);
 
-                return response.IsSuccessStatusCode
-                        ? JsonConvert.DeserializeObject<HttpResponseMessage>(response.Content.ReadAsStringAsync().Result)
-                        : null;
+                return response;
+            }
+        }
+
+        public static async Task<string> GetName(string authToken)
+        {
+            using (var client = ServiceClient.GetClient())
+            {
+                var task = client.GetAsync(string.Format("api/userprofiles/getname?a={0}", authToken));
+                await task;
+
+                return JsonConvert.DeserializeObject<string>(task.Result.Content.ReadAsStringAsync().Result);
             }
         }
     }

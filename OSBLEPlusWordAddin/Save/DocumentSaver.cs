@@ -5,6 +5,7 @@ using Microsoft.Office.Interop.Word;
 using Osble.Client.AsyncServiceClient;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Linq;
 using OSBLEPlus.Logic.DomainObjects.ActivityFeeds;
 
 namespace OSBLEPlusWordAddin
@@ -45,7 +46,7 @@ namespace OSBLEPlusWordAddin
         /// </summary>
         /// <param name="d">document</param>
         /// <returns>path to zip</returns>
-        public static string SaveFileToZip(Document doc)
+        public static string SaveFileToZip(string name, Document doc)
         {
             //determine the string value of the local directory
             string tmpSaveDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -58,10 +59,10 @@ namespace OSBLEPlusWordAddin
             }
 
             //determine the name of the file without the extension
-            string zipPath = doc.Name.Split('.')[0];
+            string zipPath = string.Format(name + DateTime.Now.ToString("-MM-dd-yyyy-HH-mm-ss"));
 
             //create path to zip
-            zipPath = String.Format(tmpSaveDir + zipPath + ".zip");
+            zipPath = string.Format(tmpSaveDir + zipPath + ".zip");
 
             //add the saved document to a ZipFile object and then use the save method to save to the local directory
             using (ZipFile zip = new ZipFile())
@@ -71,16 +72,6 @@ namespace OSBLEPlusWordAddin
             }
 
             return zipPath;
-        }
-
-        /// <summary>
-        /// Asynchronous helper function to submit the assignment through a web api call
-        /// </summary>
-        /// <param name="submitEvent">submitevent for the assignment to be submitted</param>
-        /// <param name="authToken">authorization token</param>
-        public static async Task<HttpResponseMessage> SubmitAssignment(SubmitEvent submitevent, string authtoken)
-        {
-            return await AsyncServiceClient.SubmitAssignment(submitevent, authtoken);
         }
 
         /// <summary>
@@ -109,7 +100,7 @@ namespace OSBLEPlusWordAddin
                 zipData = File.ReadAllBytes(zipPath);
             }
 
-            catch(Exception e)
+            catch (Exception e)
             {
                 return new SaveResult(true, "Failed to package document before sending to the server.");
             }
@@ -133,7 +124,7 @@ namespace OSBLEPlusWordAddin
                 return new SaveResult(false, "Failed to submit document to the server.");
             }
 
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
                 return new SaveResult(true, null);
             else
                 return new SaveResult(false, "The server failed to process the submission.");
