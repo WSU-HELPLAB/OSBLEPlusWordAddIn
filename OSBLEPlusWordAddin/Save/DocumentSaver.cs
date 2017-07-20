@@ -52,6 +52,17 @@ namespace OSBLEPlusWordAddin
             string tmpSaveDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             tmpSaveDir = Path.Combine(tmpSaveDir, StringConstants.LocalFolder);
 
+            //remove previous zip files
+            DirectoryInfo info = new DirectoryInfo(tmpSaveDir);
+            var files = info.GetFiles("*.zip").OrderBy(p => p.CreationTime).ToList();
+
+            //keep the five latest submissions
+            while (files.Count > 5)
+            {
+                File.Delete(files[0].FullName);
+                files.Remove(files[0]);
+            }
+
             //adjust local directory appropiatetly with slashes
             if (!tmpSaveDir.EndsWith("\\") && !tmpSaveDir.EndsWith("/"))
             {
