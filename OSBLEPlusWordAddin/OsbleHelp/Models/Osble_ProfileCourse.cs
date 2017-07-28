@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Osble.Models.ProfileCourse
+namespace Osble.Model.ProfileCourse
 {
     public class ProfileCourse : ICourse
     {

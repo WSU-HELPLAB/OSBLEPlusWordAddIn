@@ -177,6 +177,7 @@
     <Compile Include="OsbleHelp\Models\Osble_Models.cs" />
     <Compile Include="OsbleHelp\Models\Osble_Events.cs" />
     <Compile Include="OsbleHelp\Models\Osble_SubmissionAssignment.cs" />
+    <Compile Include="OsbleHelp\Models\Osble_WordStats.cs" />
     <Compile Include="Save\DocumentSaver.cs" />
     <Compile Include="OSBLEState.cs" />
     <Compile Include="OsbleHelp\Models\Osble_ProfileCourse.cs" />

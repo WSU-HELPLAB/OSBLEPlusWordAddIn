@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Osble.Models.SubmissionAssignment
+namespace Osble.Model.SubmissionAssignment
 {
     public class SubmisionAssignment : IAssignment
     {

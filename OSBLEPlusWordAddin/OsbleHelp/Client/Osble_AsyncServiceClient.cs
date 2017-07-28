@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Osble.Models;
-using Osble.Models.ProfileCourse;
-using Osble.Models.SubmissionAssignment;
+using Osble.Model;
+using Osble.Model.ProfileCourse;
+using Osble.Model.SubmissionAssignment;
 using OSBLEPlus.Logic.DomainObjects.ActivityFeeds;
+using OSBLEPlus.Services.Models;
 
 namespace Osble.Client.AsyncServiceClient
 {
@@ -54,7 +55,7 @@ namespace Osble.Client.AsyncServiceClient
         /// </summary>
         /// <param name="submitEvent">submitevent for the assignment to be submitted</param>
         /// <param name="authToken">authorization token</param>
-        /// <returns></returns>
+        /// <returns>HttpResponseMessage</returns>
         public static async Task<HttpResponseMessage> SubmitAssignment(SubmitEvent submitEvent, string authToken)
         {
             using (var client = ServiceClient.GetClient())
@@ -72,6 +73,11 @@ namespace Osble.Client.AsyncServiceClient
             }
         }
 
+        /// <summary>
+        /// Asynchronous web call to retrieve the full name of the logged in user
+        /// </summary>
+        /// <param name="authToken">authoruzation token</param>
+        /// <returns>full name of logged in user</returns>
         public static async Task<string> GetName(string authToken)
         {
             using (var client = ServiceClient.GetClient())
@@ -80,6 +86,24 @@ namespace Osble.Client.AsyncServiceClient
                 await task;
 
                 return JsonConvert.DeserializeObject<string>(task.Result.Content.ReadAsStringAsync().Result);
+            }
+        }
+
+        /// <summary>
+        /// Asynchronous web call to submit the word statistics to the server.
+        /// </summary>
+        /// <param name="stats">word statistics</param>
+        /// <returns>HttpResponseMessage</returns>
+        public static async Task<HttpResponseMessage> SubmitStatistics(WordStats stats)
+        {
+            using (var client = ServiceClient.GetClient())
+            {
+                //package submitevent and authtoken within a SubmissionRequest
+                var request = new WordStats(stats);
+
+                var response = await client.PostAsXmlAsync("api/word/post", request);
+
+                return response;
             }
         }
     }
@@ -94,7 +118,7 @@ namespace Osble.Client.AsyncServiceClient
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if (objectType == typeof(ICourse))
-                return JObject.Load(reader).ToObject<Osble.Models.ProfileCourse.ProfileCourse>(serializer);
+                return JObject.Load(reader).ToObject<Osble.Model.ProfileCourse.ProfileCourse>(serializer);
 
             return null;
         }

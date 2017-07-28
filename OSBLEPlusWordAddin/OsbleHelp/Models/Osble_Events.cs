@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using Ionic.Zip;
-using Osble.Models;
+using Osble.Model;
 
 //SubmissionRequest is in the OSBLEPlus.Logic.DomainObjects.ActivityFeeds namespace on the server
 //namespaces must be equivalent to send a SubmissionReuqest object to the server

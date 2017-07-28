@@ -4,7 +4,7 @@ using System.ComponentModel;
 //Originally from the http://localhost/services/AuthenticationService.svc
 //and http://localhost/services/OsbleServices.svc service references
 
-namespace Osble.Models
+namespace Osble.Model
 {
     public interface IUser
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Osble.Models.ProfileCourse;
-using Osble.Models.SubmissionAssignment;
+using Osble.Model.ProfileCourse;
+using Osble.Model.SubmissionAssignment;
 using System.Threading;
 using Osble.Client.Authentication;
 using Osble.Client.AsyncServiceClient;

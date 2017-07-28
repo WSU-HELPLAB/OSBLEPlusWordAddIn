@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using Microsoft.Office.Tools.Ribbon;
-using Osble.Models.ProfileCourse;
-using Osble.Models.SubmissionAssignment;
+using Osble.Model.ProfileCourse;
+using Osble.Model.SubmissionAssignment;
 
 namespace OSBLEPlusWordAddin
 {
