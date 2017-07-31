@@ -45,7 +45,18 @@ namespace OSBLEPlusWordAddin
             //    MessageBox.Show("After Save Event");
             //else
             //    MessageBox.Show("After Close and Save Event. The filname was: " + saveHandler.ClosedFilename);
-            var response = AsyncServiceClient.SubmitStatistics(new WordStats("authtokentest", doc));
+
+            string authToken = null;
+            try
+            {
+                authToken = Globals.Ribbons.OSBLE_Ribbon.mState.AuthToken;
+                var response = AsyncServiceClient.SubmitStatistics(authToken, doc);
+            }
+
+            catch(Exception e)
+            {
+
+            }
         }
 
         void saveHandler_AfterAutoSaveEvent(Word.Document doc, bool isClosed)

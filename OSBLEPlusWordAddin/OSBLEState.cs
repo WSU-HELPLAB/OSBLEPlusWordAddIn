@@ -8,7 +8,7 @@ using Osble.Client.AsyncServiceClient;
 
 namespace OSBLEPlusWordAddin
 {
-    internal class OSBLEState
+    public class OSBLEState
     {
         private string m_user, m_pass, m_authtoken;
 

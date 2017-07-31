@@ -9,6 +9,7 @@ using Osble.Model.ProfileCourse;
 using Osble.Model.SubmissionAssignment;
 using OSBLEPlus.Logic.DomainObjects.ActivityFeeds;
 using OSBLEPlus.Services.Models;
+using Microsoft.Office.Interop.Word;
 
 namespace Osble.Client.AsyncServiceClient
 {
@@ -94,12 +95,12 @@ namespace Osble.Client.AsyncServiceClient
         /// </summary>
         /// <param name="stats">word statistics</param>
         /// <returns>HttpResponseMessage</returns>
-        public static async Task<HttpResponseMessage> SubmitStatistics(WordStats stats)
+        public static async Task<HttpResponseMessage> SubmitStatistics(string authToken, Document doc)
         {
             using (var client = ServiceClient.GetClient())
             {
                 //package submitevent and authtoken within a SubmissionRequest
-                var request = new WordStats(stats);
+                var request = new WordStats(authToken, doc);
 
                 var response = await client.PostAsXmlAsync("api/word/post", request);
 

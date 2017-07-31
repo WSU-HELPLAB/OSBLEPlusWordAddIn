@@ -178,6 +178,10 @@
     <Compile Include="OsbleHelp\Models\Osble_Events.cs" />
     <Compile Include="OsbleHelp\Models\Osble_SubmissionAssignment.cs" />
     <Compile Include="OsbleHelp\Models\Osble_WordStats.cs" />
+    <Compile Include="RubricForm.cs" />
+    <Compile Include="RubricForm.Designer.cs">
+      <DependentUpon>RubricForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Save\DocumentSaver.cs" />
     <Compile Include="OSBLEState.cs" />
     <Compile Include="OsbleHelp\Models\Osble_ProfileCourse.cs" />
@@ -208,9 +212,13 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="RubricForm.resx">
+      <DependentUpon>RubricForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="ClassDiagram1.cd" />
     <None Include="OSBLEPlusWordAddin_1_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

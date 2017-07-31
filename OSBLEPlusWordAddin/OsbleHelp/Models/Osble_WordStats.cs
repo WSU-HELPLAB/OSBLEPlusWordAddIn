@@ -10,20 +10,20 @@ namespace OSBLEPlus.Services.Models
     [Serializable]
     public class WordStats
     {
-        string AuthToken { get; set; }
+        public string AuthToken { get; set; }
 
-        int Characters { get; set; }
-        int Words { get; set; }
-        int Sentences { get; set; }
-        int Paragraphs { get; set; }
-        int Tables { get; set; }
-        int Windows { get; set; }
+        public int Characters { get; set; }
+        public int Words { get; set; }
+        public int Sentences { get; set; }
+        public int Paragraphs { get; set; }
+        public int Tables { get; set; }
+        public int Windows { get; set; }
 
-        int SpellingErrors { get; set; }
-        bool SpellingChecked { get; set; }
+        public int SpellingErrors { get; set; }
+        public bool SpellingChecked { get; set; }
 
-        int GrammaticalErrors { get; set; }
-        bool GrammarChecked { get; set; }
+        public int GrammaticalErrors { get; set; }
+        public bool GrammarChecked { get; set; }
 
         public WordStats(string authToken, Document doc)
         {

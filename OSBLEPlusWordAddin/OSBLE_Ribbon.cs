@@ -8,17 +8,17 @@ namespace OSBLEPlusWordAddin
 {
     public partial class OSBLE_Ribbon
     {
-        private OSBLEState m_state = null;
+        public OSBLEState m_state = null;
 
         /// <summary>
         /// Property used to get and set the m_state member. The setter will update
         /// the user interface by showing or hiding the OSBLE+ ribbon options
         /// depending on the OSBLEState of the value.
         /// </summary>
-        private OSBLEState mState
+        public OSBLEState mState
         {
             get { return m_state; }
-            set
+            private set
             {
                 //avoid further steps if m_state is equivalent to the value
                 if(m_state != value)
