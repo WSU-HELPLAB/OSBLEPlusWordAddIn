@@ -10,12 +10,17 @@ using System.Windows.Forms;
 using Osble.Model;
 using Osble.Client.AsyncServiceClient;
 using OSBLEPlus.Services.Models;
+using OSBLEPlusWordAddin.Rubric;
 
 namespace OSBLEPlusWordAddin
 {
     public partial class ThisAddIn
     {
         WordSaveHandler saveHandler = null;
+
+        RubricContainerForm rubricContainerForm;
+        private Microsoft.Office.Tools.CustomTaskPane rubricTaskPane;
+
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             //initialize the save handler
@@ -24,6 +29,10 @@ namespace OSBLEPlusWordAddin
             saveHandler.AfterAutoSaveEvent += new WordSaveHandler.AfterSaveDelegate(saveHandler_AfterAutoSaveEvent);
             saveHandler.AfterSaveEvent += new WordSaveHandler.AfterSaveDelegate(saveHandler_AfterSaveEvent);
             saveHandler.AfterUiSaveEvent += new WordSaveHandler.AfterSaveDelegate(saveHandler_AfterUiSaveEvent);
+
+            rubricContainerForm = new RubricContainerForm();
+            rubricTaskPane = this.CustomTaskPanes.Add(rubricContainerForm, "Osble +Rubric");
+            rubricTaskPane.Visible = true;
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
